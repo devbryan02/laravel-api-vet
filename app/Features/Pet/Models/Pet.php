@@ -14,7 +14,7 @@ class Pet extends Model
         "name",
         "species",
         "race",
-        "sex",
+        "gender",
         "temperament",
         "reproductive_condition",
         "color",

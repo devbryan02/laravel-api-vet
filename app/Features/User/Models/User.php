@@ -13,25 +13,25 @@ class User extends Model
         "dni",
         "name",
         "email",
-        "password_hash",
-        "telephone",
-        "direction",
+        "password",
+        "phone",
+        "address",
         "latitude",
         "longitude",
         "active",
     ];
 
     // create new owner user
-    public static function createNewOwner(string $dni, string $name, string $email, string $passwordHash, string $telephone, string $direction, float $latitude, float $longitude): self
+    public static function createNewOwner(string $dni, string $name, string $email, string $password, string $phone, string $address, float $latitude, float $longitude): self
     {
         $user = new self();
 
         $user->dni = $dni;
         $user->name = $name;
         $user->email = $email;
-        $user->password_hash = $passwordHash;
-        $user->telephone = $telephone;
-        $user->direction = $direction;
+        $user->password = $password;
+        $user->phone = $phone;
+        $user->address = $address;
         $user->latitude = $latitude;
         $user->longitude = $longitude;
         $user->active = true;
@@ -41,10 +41,10 @@ class User extends Model
         return $user;
     }
 
-    // relation with rol
+    // relation with role
     public function roles()
     {
-        return $this->belongsToMany(Rol::class, "user_rol")
-                    ->using(UserRol::class);
+        return $this->belongsToMany(Role::class, "user_rol")
+                    ->using(UserRole::class);
     }
 }

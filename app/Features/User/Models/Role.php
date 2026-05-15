@@ -5,7 +5,7 @@ namespace App\Features\Usuario\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 
-class Rol extends Model
+class Role extends Model
 {
     use HasUlids;
 
@@ -14,21 +14,21 @@ class Rol extends Model
         "description"
     ];
 
-    // create new rol
+    // create new role
     public static function createNew(string $name, string $description ): self
     {
-        // create new rol
-        $rol = new self();
+        // create new role
+        $role = new self();
 
         // set values
-        $rol->name=$name;
-        $rol->description=$description;
+        $role->name=$name;
+        $role->description=$description;
 
-        // save rol
-        $rol->save();
+        // save role
+        $role->save();
 
         // return rol
-        return $rol;
+        return $role;
     }
 
     // relationship with user
@@ -36,7 +36,7 @@ class Rol extends Model
     {
         return $this->belongsToMany(User::class, "user_rol")
                     ->withPivot("assigned_at")
-                    ->using(UserRol::class);
+                    ->using(UserRole::class);
     }
 
 }

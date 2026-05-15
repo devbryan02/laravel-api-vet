@@ -5,23 +5,23 @@ namespace App\Features\Usuario\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class UserRol extends Pivot
+class UserRole extends Pivot
 {
     use HasUlids;
 
     protected $fillable = [
         "user_id",
-        "rol_id",
+        "role_id",
         "asigned_at"
     ];
 
     // create new assignment
-    public static function createAssignment(string $userRol, string $rolId): self
+    public static function createAssignment(string $userRole, string $roleId): self
     {
         $assignment = new self();
 
-        $assignment->user_rol = $userRol;
-        $assignment->rol_id = $rolId;
+        $assignment->user_role = $userRole;
+        $assignment->role_id = $roleId;
         $assignment->asigned_at = now();
 
         $assignment->save();
