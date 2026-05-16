@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\TestController;
+use App\Features\Pet\Controllers\PetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -8,5 +8,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// API route for testing
-Route::get("/hello", [TestController::class, "hello"]);
+Route::post("pets", [PetController::class, "store"]);
+
+

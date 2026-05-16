@@ -1,42 +1,29 @@
 <?php
 
-namespace App\Features\Usuario\Models;
+namespace App\Features\User\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
     use HasUlids;
+
+    public $timestamps = false;
+    protected $table = "roles";
 
     protected $fillable = [
         "name",
         "description"
     ];
 
-    // create new role
-    public static function createNew(string $name, string $description ): self
+    // Relación con UserRole
+    public function users(): BelongsToMany
     {
-        // create new role
-        $role = new self();
-
-        // set values
-        $role->name=$name;
-        $role->description=$description;
-
-        // save role
-        $role->save();
-
-        // return rol
-        return $role;
-    }
-
-    // relationship with user
-    public function users()
-    {
-        return $this->belongsToMany(User::class, "user_rol")
-                    ->withPivot("assigned_at")
-                    ->using(UserRole::class);
+        return $this->belongsToMany(User::class, "user_role", "role_id","user_id")
+                    ->using(UserRole::class)
+                    ->withPivot("asigned_at");
     }
 
 }

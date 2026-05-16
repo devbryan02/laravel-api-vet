@@ -1,13 +1,18 @@
 <?php
 
-namespace App\Features\Usuario\Models;
+namespace App\Features\User\Models;
 
+use App\Features\Pet\Models\Pet;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Model
 {
     use HasUlids;
+
+    protected $table = "users";
 
     protected $fillable = [
         "dni",
@@ -21,30 +26,16 @@ class User extends Model
         "active",
     ];
 
-    // create new owner user
-    public static function createNewOwner(string $dni, string $name, string $email, string $password, string $phone, string $address, float $latitude, float $longitude): self
+    public function roles(): BelongsToMany
     {
-        $user = new self();
-
-        $user->dni = $dni;
-        $user->name = $name;
-        $user->email = $email;
-        $user->password = $password;
-        $user->phone = $phone;
-        $user->address = $address;
-        $user->latitude = $latitude;
-        $user->longitude = $longitude;
-        $user->active = true;
-
-        $user->save();
-
-        return $user;
+        return $this->belongsToMany(Role::class, "user_role", "user_id", "role_id")
+                    ->using(UserRole::class)
+                    ->withPivot("asigned_at");
     }
 
-    // relation with role
-    public function roles()
+    public function pets(): HasMany
     {
-        return $this->belongsToMany(Role::class, "user_rol")
-                    ->using(UserRole::class);
+        return $this->hasMany(Pet::class);
     }
+
 }

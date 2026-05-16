@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Features\Usuario\Models;
+namespace App\Features\User\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -9,24 +9,18 @@ class UserRole extends Pivot
 {
     use HasUlids;
 
+    protected $table = "user_role";
+
     protected $fillable = [
         "user_id",
         "role_id",
         "asigned_at"
     ];
 
-    // create new assignment
-    public static function createAssignment(string $userRole, string $roleId): self
+    protected static function booted(): void
     {
-        $assignment = new self();
-
-        $assignment->user_role = $userRole;
-        $assignment->role_id = $roleId;
-        $assignment->asigned_at = now();
-
-        $assignment->save();
-
-        return $assignment;
+        static::creating(function (UserRole $userRole) {
+            $userRole->asigned_at = now();
+        });
     }
-
 }

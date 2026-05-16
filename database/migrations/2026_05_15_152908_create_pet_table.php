@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string("color");
             $table->integer("years");
             $table->integer("months");
-            $table->enum("status", ["ADOPTADO", "EN ADOPCIÓN"])->default("ADOPTADO");
+            $table->enum("status", ["ADOPTADO", "EN ADOPCIÓN", "FALLECIDO", "PERDIDO"])->default("ADOPTADO");
             $table->foreignUlid("user_id")->constrained();
             $table->timestamp("created_at")->useCurrent();
             $table->timestamp("updated_at")->useCurrent()->useCurrentOnUpdate();
