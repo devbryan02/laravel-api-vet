@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Pet extends Model
 {
     use HasUlids;
+
     protected $fillable = [
         "identifier",
         "name",

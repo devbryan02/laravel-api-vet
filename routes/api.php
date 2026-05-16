@@ -8,6 +8,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post("pets", [PetController::class, "store"]);
+// Pets routes
+Route::apiResource('pets', PetController::class);
 
 

@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vaccine extends Model
 {
-
     use HasUlids;
 
+    
     protected $fillable = [
         "type",
         "aplication_date",
