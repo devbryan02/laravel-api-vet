@@ -22,8 +22,7 @@ return new class extends Migration
             $table->string("latitude")->nullable();
             $table->string("longitude")->nullable();
             $table->boolean("active")->default(true);
-            $table->timestamp("created_at")->useCurrent();
-            $table->timestamp("updated_at")->useCurrent()->useCurrentOnUpdate();
+            $table->timestamps();
         });
     }
 

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string("ip_address", 54)->nullable();
             $table->string("user_agent")->nullable();
             $table->foreignUlid("user_id")->nullable()->constrained()->nullOnDelete();
-            $table->timestamp("created_at")->useCurrent();
+            $table->timestamps();
         });
     }
 

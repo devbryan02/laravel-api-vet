@@ -25,8 +25,7 @@ return new class extends Migration
             $table->integer("months");
             $table->enum("status", ["ADOPTADO", "EN ADOPCIÓN", "FALLECIDO", "PERDIDO"])->default("ADOPTADO");
             $table->foreignUlid("user_id")->constrained();
-            $table->timestamp("created_at")->useCurrent();
-            $table->timestamp("updated_at")->useCurrent()->useCurrentOnUpdate();
+            $table->timestamps();
         });
     }
 

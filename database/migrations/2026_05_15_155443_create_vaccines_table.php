@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date("expiration_date");
             $table->date("next_vaccine_date");
             $table->foreignUlid("pet_id")->constrained();
-            $table->timestamp("created_at")->useCurrent();
+            $table->timestamps();
         });
     }
 

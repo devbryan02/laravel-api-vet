@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('path_url');
             $table->text('description');
             $table->foreignUlid('pet_id')->constrained();
-            $table->timestamp("created_at")->useCurrent();
+            $table->timestamps();
         });
     }
 

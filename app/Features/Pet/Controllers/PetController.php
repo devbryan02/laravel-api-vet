@@ -38,7 +38,6 @@ class PetController extends Controller
     public function show(Pet $pet): PetResource
     {
         $pet->load("user");
-
         return new PetResource($pet);
     }
 
@@ -53,7 +52,6 @@ class PetController extends Controller
     public function destroy(Pet $pet): Response
     {
         $this->service->delete($pet);
-
         return response()->noContent();
     }
 

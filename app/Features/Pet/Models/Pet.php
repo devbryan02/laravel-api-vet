@@ -3,9 +3,11 @@
 namespace App\Features\Pet\Models;
 
 use App\Features\User\Models\User;
+use App\Features\Vaccine\Models\Vaccine;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pet extends Model
 {
@@ -29,6 +31,11 @@ class Pet extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function vaccines(): HasMany
+    {
+        return $this->hasMany(Vaccine::class);
     }
 
 }
