@@ -11,7 +11,7 @@ class StoreVaccineRequest extends  FormRequest
         return [
             "type"              => "required|string",
             "aplication_date"   => "required|date",
-            "months_validity"     => "required|integer",
+            "months_validity"   => "required|integer",
             "pet_id"            => "required|exists:pets,id",
         ];
     }
