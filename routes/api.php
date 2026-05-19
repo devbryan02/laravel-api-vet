@@ -13,7 +13,7 @@ Route::pattern('image', '[0-9A-Za-z]{26}');
 
 require base_path('app/Features/User/routes/api.php');
 
-Route::middleware(['auth:api', 'role:VETERINARIAN'])->group(function () {
+Route::middleware(['auth:api', 'role:VETERINARIAN,ADMIN'])->group(function () {
     Route::post('pets/images', [PetImageController::class, 'store']);
     Route::delete('pets/images/{image}', [PetImageController::class, 'destroy']);
 

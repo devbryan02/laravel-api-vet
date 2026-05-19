@@ -51,7 +51,7 @@ class UserService
     {
         $allowed = match ($managedRole) {
             RoleName::VETERINARIAN => $actor?->hasRole(RoleName::ADMIN) === true,
-            RoleName::OWNER => $actor?->hasRole(RoleName::VETERINARIAN) === true,
+            RoleName::OWNER => $actor?->hasRole(RoleName::VETERINARIAN) === true || $actor?->hasRole(RoleName::ADMIN) === true,
             RoleName::ADMIN => false,
         };
 
