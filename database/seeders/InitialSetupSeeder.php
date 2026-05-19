@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Features\User\Models\Role;
+use App\Features\User\Models\RoleName;
 use App\Features\User\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -15,8 +16,18 @@ class InitialSetupSeeder extends Seeder
     public function run(): void
     {
         $adminRole = Role::updateOrCreate(
-            ['name' => 'ADMIN'],
+            ['name' => RoleName::ADMIN->value],
             ['description' => 'Administrador del sistema']
+        );
+
+        Role::updateOrCreate(
+            ['name' => RoleName::VETERINARIAN->value],
+            ['description' => 'Veterinario']
+        );
+
+        Role::updateOrCreate(
+            ['name' => RoleName::OWNER->value],
+            ['description' => 'Dueño de mascota']
         );
 
         $adminUser = User::updateOrCreate(

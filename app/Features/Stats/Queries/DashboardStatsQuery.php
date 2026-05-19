@@ -21,7 +21,7 @@ class DashboardStatsQuery
             'totalOwners' => DB::table('users')
                 ->join('user_role', 'users.id', '=', 'user_role.user_id')
                 ->join('roles', 'roles.id', '=', 'user_role.role_id')
-                ->where('roles.name', 'owner')
+                ->where('roles.name', 'OWNER')
                 ->count(),
             'vaccinatedThisMonth' => Vaccine::whereBetween('aplication_date', [$startOfMonth, $today])
                 ->distinct('pet_id')

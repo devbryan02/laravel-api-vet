@@ -1,0 +1,2253 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Veterinaria API",
+        "description": "Documentación OpenAPI de la API de veterinaria.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/",
+            "description": "Servidor principal"
+        }
+    ],
+    "paths": {
+        "/api/pets": {
+            "get": {
+                "tags": [
+                    "Mascotas"
+                ],
+                "summary": "Listar mascotas",
+                "operationId": "fd9dbe447bbabd2069e0273aba5a573d",
+                "responses": {
+                    "200": {
+                        "description": "Listado de mascotas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Pet"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Mascotas"
+                ],
+                "summary": "Crear mascota",
+                "operationId": "dd1b76666017d05ace0bcda388561641",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StorePetRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mascota creada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pet"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pets/{pet}": {
+            "get": {
+                "tags": [
+                    "Mascotas"
+                ],
+                "summary": "Ver mascota",
+                "operationId": "9d5b229a4fde1ed73d595c1b1d3e6c42",
+                "parameters": [
+                    {
+                        "name": "pet",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalle de mascota",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pet"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Mascota no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Mascotas"
+                ],
+                "summary": "Actualizar mascota",
+                "operationId": "920bc87be7d4cedd6ae23b869e954513",
+                "parameters": [
+                    {
+                        "name": "pet",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdatePetRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mascota actualizada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Pet"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Mascota no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Mascotas"
+                ],
+                "summary": "Eliminar mascota",
+                "operationId": "b7b10b07ccfc1262bef72472a6def7d8",
+                "parameters": [
+                    {
+                        "name": "pet",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Mascota eliminada"
+                    },
+                    "404": {
+                        "description": "Mascota no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pets/images": {
+            "post": {
+                "tags": [
+                    "Imágenes"
+                ],
+                "summary": "Subir imagen de mascota",
+                "operationId": "cd2f465669c9e6724ccc82454d7c2400",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StorePetImageRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Imagen guardada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Imagen de la mascota guardada exitosamente."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/PetImage"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pets/images/{image}": {
+            "delete": {
+                "tags": [
+                    "Imágenes"
+                ],
+                "summary": "Eliminar imagen de mascota",
+                "operationId": "7ea06f9d989d4ab5d0989825a2555719",
+                "parameters": [
+                    {
+                        "name": "image",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Imagen eliminada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "La imagen y el archivo físico fueron eliminados correctamente."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Imagen no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/stats/dashboard": {
+            "get": {
+                "tags": [
+                    "Estadísticas"
+                ],
+                "summary": "Dashboard principal",
+                "description": "GET /stats/dashboard\nNúmeros rápidos para el panel principal",
+                "operationId": "1976ae6d9660a18f788e5c2adaaeacad",
+                "responses": {
+                    "200": {
+                        "description": "Resumen del dashboard",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DashboardStats"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/stats/vaccine-alerts": {
+            "get": {
+                "tags": [
+                    "Estadísticas"
+                ],
+                "summary": "Alertas de vacunas",
+                "description": "GET /stats/vaccine-alerts\nMascotas con vacuna vencida o próxima a vencer",
+                "operationId": "198f8cd6affd66ba521687a27ede31d3",
+                "responses": {
+                    "200": {
+                        "description": "Alertas de vacunas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/VaccineAlert"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/stats/unvaccinated": {
+            "get": {
+                "tags": [
+                    "Estadísticas"
+                ],
+                "summary": "Mascotas sin vacunas",
+                "description": "GET /stats/unvaccinated\nMascotas sin ninguna vacuna registrada",
+                "operationId": "608c5a7362f6963d790a27cc84737580",
+                "responses": {
+                    "200": {
+                        "description": "Mascotas sin vacunas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/UnvaccinatedPet"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/stats/monthly-activity": {
+            "get": {
+                "tags": [
+                    "Estadísticas"
+                ],
+                "summary": "Actividad mensual",
+                "description": "GET /stats/monthly-activity\nMascotas nuevas y vacunas aplicadas por mes (últimos 12 meses)",
+                "operationId": "39a4dda56b7290edafdb4dbf06518314",
+                "responses": {
+                    "200": {
+                        "description": "Actividad mensual",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/MonthlyActivity"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/stats/species-distribution": {
+            "get": {
+                "tags": [
+                    "Estadísticas"
+                ],
+                "summary": "Distribución por especie",
+                "description": "GET /stats/species-distribution\nDistribución por especie",
+                "operationId": "4aa4c862b277da80ca6b132df3634f66",
+                "responses": {
+                    "200": {
+                        "description": "Distribución por especie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/SpeciesDistribution"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Iniciar sesión",
+                "description": "Autentica al usuario y retorna un JWT válido.",
+                "operationId": "e0c548fa9b5f5327b9e18821300bc7e1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthLoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Inicio de sesión exitoso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciales inválidas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Cerrar sesión",
+                "description": "Invalida el token JWT actual.",
+                "operationId": "b7f3adcb1bffd3a21330d7e7361c0e5f",
+                "responses": {
+                    "200": {
+                        "description": "Cierre de sesión exitoso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cierre de sesión exitoso"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Usuario autenticado",
+                "description": "Retorna los datos del usuario autenticado actual.",
+                "operationId": "31037e6b0e8c45e8a7b55a2d16cef825",
+                "responses": {
+                    "200": {
+                        "description": "Usuario autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/veterinarians": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Listar veterinarios",
+                "operationId": "7a007a8a6b5031fe673160de3b0bb3f0",
+                "responses": {
+                    "200": {
+                        "description": "Listado de veterinarios",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Crear veterinario",
+                "operationId": "5b1105cc1c6f3f183d9c1de0bbb5d9a9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreVeterinarianRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Veterinario creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Veterinario creado correctamente."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/owners": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Listar dueños",
+                "operationId": "0a9252bfe313bb34dd8521abd7890b15",
+                "responses": {
+                    "200": {
+                        "description": "Listado de dueños",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/User"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Crear dueño",
+                "operationId": "23f5b99c2fbc5306d07e2cd63cbef7c7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreOwnerRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Dueño creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Dueño creado correctamente."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{user}": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Ver usuario",
+                "operationId": "bdf0337508048f38a7586a8c25eacfc9",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalle de usuario",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Actualizar usuario",
+                "operationId": "3af07796c64c31475047d0552c63ce0d",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario actualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuario actualizado correctamente."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Eliminar usuario",
+                "operationId": "709b788148ce8c4f57ead1a83f0cdce1",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Usuario eliminado"
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pets/{pet}/vaccines": {
+            "get": {
+                "tags": [
+                    "Vacunas"
+                ],
+                "summary": "Listar vacunas por mascota",
+                "description": "Retorna todas las vacunas registradas para una mascota específica.",
+                "operationId": "c850d517bd2b32b0c5d7b7975b3ab61d",
+                "parameters": [
+                    {
+                        "name": "pet",
+                        "in": "path",
+                        "description": "ULID de la mascota",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listado de vacunas de la mascota",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Vaccine"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Mascota no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/vaccines": {
+            "get": {
+                "tags": [
+                    "Vacunas"
+                ],
+                "summary": "Listar vacunas",
+                "operationId": "8a9689ba280a59b18749559b73e69e04",
+                "responses": {
+                    "200": {
+                        "description": "Listado de vacunas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Vaccine"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Vacunas"
+                ],
+                "summary": "Crear vacuna",
+                "operationId": "bd48827b06857782deea9599df164b40",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreVaccineRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Vacuna creada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Vaccine"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/vaccines/{vaccine}": {
+            "get": {
+                "tags": [
+                    "Vacunas"
+                ],
+                "summary": "Ver vacuna",
+                "operationId": "6cfe139bc16d85358c3d22a7f812ef8b",
+                "parameters": [
+                    {
+                        "name": "vaccine",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalle de vacuna",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Vaccine"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Vacuna no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Vacunas"
+                ],
+                "summary": "Actualizar vacuna",
+                "operationId": "dd7a480e241bcdfdb916ecd7f1b812c1",
+                "parameters": [
+                    {
+                        "name": "vaccine",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateVaccineRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Vacuna actualizada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Vaccine"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Vacuna no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Vacunas"
+                ],
+                "summary": "Eliminar vacuna",
+                "operationId": "e63068f6ce4e3d1e82e3405e941c7e5b",
+                "parameters": [
+                    {
+                        "name": "vaccine",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Vacuna eliminada"
+                    },
+                    "404": {
+                        "description": "Vacuna no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AuthLoginRequest": {
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "admin@veterinaria.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "example": "secret123"
+                    }
+                },
+                "type": "object"
+            },
+            "UserSummary": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Brayan Cárdenas"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "admin@veterinaria.com"
+                    },
+                    "role": {
+                        "type": "string",
+                        "example": "ADMIN"
+                    }
+                },
+                "type": "object"
+            },
+            "AuthSuccessResponse": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Inicio de sesión exitoso"
+                    },
+                    "token": {
+                        "type": "string",
+                        "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+                    },
+                    "token_type": {
+                        "type": "string",
+                        "example": "bearer"
+                    },
+                    "expires_in": {
+                        "type": "integer",
+                        "example": 3600
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/UserSummary"
+                    }
+                },
+                "type": "object"
+            },
+            "PetSummary": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Firulais"
+                    }
+                },
+                "type": "object"
+            },
+            "RoleList": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "example": [
+                    "ADMIN"
+                ]
+            },
+            "User": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    },
+                    "dni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Brayan Cárdenas"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "admin@veterinaria.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "999888777",
+                        "nullable": true
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Central 123",
+                        "nullable": true
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "float",
+                        "example": -12.0464,
+                        "nullable": true
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "float",
+                        "example": -77.0428,
+                        "nullable": true
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "roles": {
+                        "$ref": "#/components/schemas/RoleList"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "OwnerSummary": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Juan Pérez"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "999888777",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "Pet": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Firulais"
+                    },
+                    "species": {
+                        "type": "string",
+                        "example": "Canino"
+                    },
+                    "race": {
+                        "type": "string",
+                        "example": "Mestizo"
+                    },
+                    "gender": {
+                        "type": "string",
+                        "example": "MACHO"
+                    },
+                    "temperament": {
+                        "type": "string",
+                        "example": "Tranquilo"
+                    },
+                    "reproductive_condition": {
+                        "type": "string",
+                        "example": "ENTERO"
+                    },
+                    "age": {
+                        "type": "string",
+                        "example": "3 años y 4 meses"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "ADOPTADO"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/OwnerSummary"
+                    }
+                },
+                "type": "object"
+            },
+            "Vaccine": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "Rabia"
+                    },
+                    "aplication_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-05-18"
+                    },
+                    "months_validity": {
+                        "type": "integer",
+                        "example": 12
+                    },
+                    "expiration_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2027-05-18"
+                    },
+                    "pet": {
+                        "$ref": "#/components/schemas/PetSummary"
+                    }
+                },
+                "type": "object"
+            },
+            "PetImage": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    },
+                    "pet_id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    },
+                    "path": {
+                        "type": "string",
+                        "example": "pets/abc123.webp"
+                    },
+                    "url": {
+                        "type": "string",
+                        "example": "/storage/pets/abc123.webp",
+                        "nullable": true
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Vacuna aplicada",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "DashboardStats": {
+                "properties": {
+                    "total_pets": {
+                        "type": "integer",
+                        "example": 120
+                    },
+                    "total_owners": {
+                        "type": "integer",
+                        "example": 45
+                    },
+                    "vaccinated_this_month": {
+                        "type": "integer",
+                        "example": 17
+                    },
+                    "overdue_vaccines": {
+                        "type": "integer",
+                        "example": 8
+                    },
+                    "upcoming_in_30_days": {
+                        "type": "integer",
+                        "example": 12
+                    },
+                    "unvaccinated_count": {
+                        "type": "integer",
+                        "example": 6
+                    }
+                },
+                "type": "object"
+            },
+            "MonthlyActivity": {
+                "properties": {
+                    "month": {
+                        "type": "string",
+                        "example": "May"
+                    },
+                    "month_key": {
+                        "type": "string",
+                        "example": "2026-05"
+                    },
+                    "new_pets": {
+                        "type": "integer",
+                        "example": 9
+                    },
+                    "vaccines_applied": {
+                        "type": "integer",
+                        "example": 14
+                    }
+                },
+                "type": "object"
+            },
+            "SpeciesDistribution": {
+                "properties": {
+                    "species": {
+                        "type": "string",
+                        "example": "Canino"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "example": 75
+                    },
+                    "percentage": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 62.5
+                    }
+                },
+                "type": "object"
+            },
+            "UnvaccinatedPet": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Firulais"
+                    },
+                    "species": {
+                        "type": "string",
+                        "example": "Canino"
+                    },
+                    "race": {
+                        "type": "string",
+                        "example": "Mestizo"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "ADOPTADO"
+                    },
+                    "registered_at": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-05-18"
+                    },
+                    "owner": {
+                        "$ref": "#/components/schemas/OwnerSummary"
+                    }
+                },
+                "type": "object"
+            },
+            "VaccineAlert": {
+                "properties": {
+                    "vaccine_id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "Rabia"
+                    },
+                    "alert_type": {
+                        "type": "string",
+                        "example": "VENCIDA"
+                    },
+                    "days_diff": {
+                        "type": "integer",
+                        "example": -3
+                    },
+                    "application_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-05-18"
+                    },
+                    "next_vaccine_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-05-18"
+                    },
+                    "months_validity": {
+                        "type": "integer",
+                        "example": 12
+                    },
+                    "pet": {
+                        "$ref": "#/components/schemas/PetSummary"
+                    },
+                    "owner": {
+                        "$ref": "#/components/schemas/OwnerSummary"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreVeterinarianRequest": {
+                "required": [
+                    "dni",
+                    "name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "dni": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Dra. María López"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "maria@veterinaria.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "example": "secret123"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "999888777",
+                        "nullable": true
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Central 123",
+                        "nullable": true
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "StoreOwnerRequest": {
+                "required": [
+                    "dni",
+                    "name",
+                    "email"
+                ],
+                "properties": {
+                    "dni": {
+                        "type": "string",
+                        "example": "87654321"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Juan Pérez"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "juan@example.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "999777666",
+                        "nullable": true
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Jr. Lima 456",
+                        "nullable": true
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateUserRequest": {
+                "properties": {
+                    "dni": {
+                        "type": "string",
+                        "example": "87654321"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Juan Pérez"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "juan@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "example": "secret123"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "999777666",
+                        "nullable": true
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Jr. Lima 456",
+                        "nullable": true
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "StorePetRequest": {
+                "required": [
+                    "name",
+                    "species",
+                    "race",
+                    "gender",
+                    "temperament",
+                    "reproductive_condition",
+                    "color",
+                    "years",
+                    "months",
+                    "status",
+                    "user_id"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Firulais"
+                    },
+                    "species": {
+                        "type": "string",
+                        "example": "Canino"
+                    },
+                    "race": {
+                        "type": "string",
+                        "example": "Mestizo"
+                    },
+                    "gender": {
+                        "type": "string",
+                        "example": "MACHO"
+                    },
+                    "temperament": {
+                        "type": "string",
+                        "example": "Tranquilo"
+                    },
+                    "reproductive_condition": {
+                        "type": "string",
+                        "example": "ENTERO"
+                    },
+                    "color": {
+                        "type": "string",
+                        "example": "Marrón"
+                    },
+                    "years": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "months": {
+                        "type": "integer",
+                        "example": 4
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "ADOPTADO"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdatePetRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Firulais"
+                    },
+                    "temperament": {
+                        "type": "string",
+                        "example": "Juguetón"
+                    },
+                    "reproductive_condition": {
+                        "type": "string",
+                        "example": "CASTRADO"
+                    },
+                    "color": {
+                        "type": "string",
+                        "example": "Negro"
+                    },
+                    "years": {
+                        "type": "integer",
+                        "example": 4
+                    },
+                    "months": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "ADOPTADO"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreVaccineRequest": {
+                "required": [
+                    "type",
+                    "aplication_date",
+                    "months_validity",
+                    "pet_id"
+                ],
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "example": "Rabia"
+                    },
+                    "aplication_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-05-18"
+                    },
+                    "months_validity": {
+                        "type": "integer",
+                        "example": 12
+                    },
+                    "pet_id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateVaccineRequest": {
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "example": "Rabia"
+                    },
+                    "aplication_date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-05-18"
+                    },
+                    "months_validity": {
+                        "type": "integer",
+                        "example": 12
+                    }
+                },
+                "type": "object"
+            },
+            "StorePetImageRequest": {
+                "required": [
+                    "pet_id",
+                    "image"
+                ],
+                "properties": {
+                    "pet_id": {
+                        "type": "string",
+                        "example": "01JVMR0M2T6FC7NG8R5GRM5AJV"
+                    },
+                    "image": {
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Foto frontal",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "ErrorResponse": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "No autenticado."
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": 401
+                    }
+                },
+                "type": "object"
+            },
+            "ValidationErrorResponse": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Los datos enviados no son válidos."
+                    },
+                    "status": {
+                        "type": "integer",
+                        "example": 422
+                    },
+                    "errors": {
+                        "properties": {
+                            "email": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "example": [
+                                    "El campo email es obligatorio."
+                                ]
+                            },
+                            "password": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "example": [
+                                    "El campo password es obligatorio."
+                                ]
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Autenticación JWT usando Bearer token",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autenticación",
+            "description": "Endpoints de autenticación JWT"
+        },
+        {
+            "name": "Usuarios",
+            "description": "Gestión de usuarios y roles"
+        },
+        {
+            "name": "Mascotas",
+            "description": "Gestión de mascotas"
+        },
+        {
+            "name": "Imágenes",
+            "description": "Gestión de imágenes de mascotas"
+        },
+        {
+            "name": "Vacunas",
+            "description": "Gestión de vacunas"
+        },
+        {
+            "name": "Estadísticas",
+            "description": "Dashboard y reportes"
+        }
+    ],
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ]
+}
