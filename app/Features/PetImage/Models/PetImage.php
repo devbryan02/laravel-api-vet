@@ -2,12 +2,16 @@
 
 namespace App\Features\PetImage\Models;
 
+use App\Features\Pet\Models\Pet;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PetImage extends Model
 {
     use HasUlids;
+
+    protected $table = "images";
 
     protected $fillable = [
         "path_url",
@@ -15,21 +19,9 @@ class PetImage extends Model
         "pet_id",
     ];
 
-    public static function createNewImage(string $pathUrl, string $description, string $petId): self
+    public function pet(): BelongsTo
     {
-        // create new pet image
-        $petImage = new self();
-
-        // set pet image data
-        $petImage->path_url = $pathUrl;
-        $petImage->description = $description;
-        $petImage->pet_id = $petId;
-
-        // save pet image
-        $petImage->save();
-
-        // return pet image
-        return $petImage;
-
+        return $this->belongsTo(Pet::class);
     }
+
 }

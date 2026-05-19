@@ -2,8 +2,12 @@
 
 namespace App\Features\Pet\Models;
 
+use App\Features\User\Models\User;
+use App\Features\Vaccine\Models\Vaccine;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pet extends Model
 {
@@ -14,7 +18,7 @@ class Pet extends Model
         "name",
         "species",
         "race",
-        "sex",
+        "gender",
         "temperament",
         "reproductive_condition",
         "color",
@@ -23,5 +27,15 @@ class Pet extends Model
         "status",
         "user_id",
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function vaccines(): HasMany
+    {
+        return $this->hasMany(Vaccine::class);
+    }
 
 }

@@ -2,32 +2,28 @@
 
 namespace App\Features\Audit\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Audit extends Model
 {
     use HasUlids;
 
     protected $fillable = [
-        "action",
-        "entity",
-        "ip_address",
-        "user_id"
+        'action',
+        'entity_type',
+        'entity_id',
+        'payload',
+        'ip_address',
+        'user_agent',
+        'user_id'
     ];
 
-    public static function saveAudit(string $action, string $entity, string $ip_address, ?int $user_id): self
+    public function user(): BelongsTo
     {
-        $audit = new self();
-
-        $audit->action = $action;
-        $audit->entity = $entity;
-        $audit->ip_address = $ip_address;
-        $audit->user_id = $user_id;
-
-        $audit->save();
-
-        return $audit;
+        return $this->belongsTo(User::class, "user_id");
     }
 
 }
