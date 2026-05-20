@@ -7,6 +7,9 @@ use App\Features\Pet\Requests\StorePetRequest;
 use App\Features\Pet\Requests\UpdatePetRequest;
 use App\Features\Pet\Resources\PetResource;
 use App\Features\Pet\Services\PetService;
+use App\Support\PaginatedResponse;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
@@ -26,19 +29,26 @@ class PetController extends Controller
         summary: 'Listar mascotas',
         security: [['bearerAuth' => []]],
         tags: ['Mascotas'],
+        parameters: [
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 10)),
+        ],
         responses: [
-            new OA\Response(response: 200, description: 'Listado de mascotas', content: new OA\JsonContent(
-                properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Pet'))],
+            new OA\Response(response: 200, description: 'Listado paginado de mascotas', content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Pet')),
+                    new OA\Property(property: 'pagination', type: 'object'),
+                ],
                 type: 'object'
             )),
             new OA\Response(response: 401, description: 'No autenticado', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
         ],
     )]
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): JsonResponse
     {
-        $pets = $this->service->findAll();
+        $perPage = (int) $request->input('per_page', 10);
+        $pets = $this->service->findAll($perPage);
 
-        return PetResource::collection($pets);
+        return PaginatedResponse::make(PetResource::collection($pets), $pets);
     }
 
     #[OA\Post(
@@ -115,5 +125,60 @@ class PetController extends Controller
         $this->service->delete($pet);
 
         return response()->noContent();
+    }
+
+    #[OA\Get(
+        path: '/api/pets/owner/{ownerId}',
+        summary: 'Listar mascotas de un dueño',
+        security: [['bearerAuth' => []]],
+        tags: ['Mascotas'],
+        parameters: [
+            new OA\Parameter(name: 'ownerId', in: 'path', required: true, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 10)),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Listado paginado de mascotas', content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Pet')),
+                    new OA\Property(property: 'pagination', type: 'object'),
+                ],
+                type: 'object'
+            )),
+        ],
+    )]
+    public function byOwner(string $ownerId, Request $request): JsonResponse
+    {
+        $perPage = (int) $request->input('per_page', 10);
+        $pets = $this->service->findByOwner($ownerId, $perPage);
+
+        return PaginatedResponse::make(PetResource::collection($pets), $pets);
+    }
+
+    #[OA\Get(
+        path: '/api/pets/search',
+        summary: 'Buscar mascotas por nombre o DNI/nombre del dueño',
+        security: [['bearerAuth' => []]],
+        tags: ['Mascotas'],
+        parameters: [
+            new OA\Parameter(name: 'q', in: 'query', required: false, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 10)),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Listado paginado de mascotas', content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Pet')),
+                    new OA\Property(property: 'pagination', type: 'object'),
+                ],
+                type: 'object'
+            )),
+        ],
+    )]
+    public function search(Request $request): JsonResponse
+    {
+        $search = $request->input('q');
+        $perPage = (int) $request->input('per_page', 10);
+        $pets = $this->service->search($search, $perPage);
+
+        return PaginatedResponse::make(PetResource::collection($pets), $pets);
     }
 }

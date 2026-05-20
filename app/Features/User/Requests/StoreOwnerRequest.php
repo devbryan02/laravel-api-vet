@@ -9,7 +9,8 @@ class StoreOwnerRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->hasRole(RoleName::VETERINARIAN) === true;
+        return $this->user()?->hasRole(RoleName::VETERINARIAN) === true
+            || $this->user()?->hasRole(RoleName::ADMIN) === true;
     }
 
     public function rules(): array
