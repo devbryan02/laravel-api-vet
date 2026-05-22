@@ -23,4 +23,19 @@ class UpdatePetRequest extends FormRequest
             "status"                 => ["sometimes", "required", "string"]
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            "name.required" => "El nombre de la mascota es obligatorio.",
+            "temperament.required" => "El temperamento de la mascota es obligatorio.",
+            "reproductive_condition.required" => "La condición reproductiva es obligatoria.",
+            "color.required" => "El color de la mascota es obligatorio.",
+            "years.required" => "Los años de la mascota son obligatorios.",
+            "years.integer" => "Los años deben ser un número entero.",
+            "months.required" => "Los meses de la mascota son obligatorios.",
+            "months.integer" => "Los meses deben ser un número entero.",
+            "status.required" => "El estado de la mascota es obligatorio.",
+        ];
+    }
 }

@@ -14,6 +14,7 @@ class PetResource extends JsonResource
             "species"       =>$this->species,
             "race"          =>$this->race,
             "gender"        =>$this->gender,
+            "color"         =>$this->color,
             "temperament"   =>$this->temperament,
             "reproductive_condition"=>$this->reproductive_condition,
             "age"           =>$this->years." años y ".$this->months." meses",

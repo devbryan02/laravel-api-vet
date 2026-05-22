@@ -7,6 +7,7 @@ use App\Features\Pet\Queries\PetsByOwnerQuery;
 use App\Features\Pet\Queries\SearchPetsQuery;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 readonly class PetService
 {
@@ -46,6 +47,14 @@ readonly class PetService
 
     public function delete(Pet $pet): bool
     {
+        if ($pet->vaccines()->exists()) {
+            throw new HttpException(409, 'No se puede eliminar la mascota porque tiene vacunas asociadas. Elimine primero las vacunas.');
+        }
+
+        if ($pet->images()->exists()) {
+            throw new HttpException(409, 'No se puede eliminar la mascota porque tiene imágenes asociadas. Elimine primero las imágenes.');
+        }
+
         return $pet->delete();
     }
 

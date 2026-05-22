@@ -10,6 +10,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class UserService
 {
@@ -60,6 +61,10 @@ class UserService
 
     public function delete(User $user): bool
     {
+        if ($user->pets()->exists()) {
+            throw new HttpException(409, 'No se puede eliminar el usuario porque tiene mascotas asociadas. Elimine primero las mascotas de este dueño.');
+        }
+
         return (bool) DB::transaction(function () use ($user) {
             $user->roles()->detach();
 

@@ -32,10 +32,14 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (ValidationException $exception, Request $request) {
+            $errors = $exception->errors();
+            $firstField = array_key_first($errors);
+            $firstMessage = $errors[$firstField][0] ?? 'Los datos enviados no son válidos.';
+
             return ApiErrorResponse::make(
-                message: 'Los datos enviados no son válidos.',
+                message: $firstMessage,
                 status: Response::HTTP_UNPROCESSABLE_ENTITY,
-                errors: $exception->errors()
+                errors: $errors
             );
         });
 
@@ -91,8 +95,20 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (QueryException $exception, Request $request) {
+            $sql = $exception->getMessage();
+            $code = $exception->getCode();
+
+            // MySQL: 1451 (FK), 1062 (Unique) | SQLite: 19 (FK/Unique) | PostgreSQL: 23503 (FK), 23505 (Unique)
+            if (str_contains($sql, '1451') || str_contains($sql, 'FOREIGN KEY constraint failed') || str_contains($sql, '23503')) {
+                $message = 'No se puede eliminar el registro porque está relacionado con otros datos.';
+            } elseif (str_contains($sql, '1062') || str_contains($sql, 'UNIQUE constraint failed') || str_contains($sql, '23505')) {
+                $message = 'El valor ingresado ya existe en el sistema.';
+            } else {
+                $message = 'No se pudo procesar la operación en la base de datos.';
+            }
+
             return ApiErrorResponse::make(
-                message: 'No se pudo procesar la operación en la base de datos.',
+                message: $message,
                 status: Response::HTTP_CONFLICT,
                 exception: $exception
             );
