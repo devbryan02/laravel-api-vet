@@ -8,6 +8,9 @@ use App\Features\Vaccine\Requests\StoreVaccineRequest;
 use App\Features\Vaccine\Requests\UpdateVaccineRequest;
 use App\Features\Vaccine\Resources\VaccineResource;
 use App\Features\Vaccine\Services\VaccineService;
+use App\Support\PaginatedResponse;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
@@ -31,18 +34,16 @@ class VaccineController extends Controller
                 required: true,
                 schema: new OA\Schema(type: 'string', example: '01JVMR0M2T6FC7NG8R5GRM5AJV'),
             ),
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 10)),
         ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Listado de vacunas de la mascota',
+                description: 'Listado paginado de vacunas de la mascota',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(
-                            property: 'data',
-                            type: 'array',
-                            items: new OA\Items(ref: '#/components/schemas/Vaccine'),
-                        ),
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Vaccine')),
+                        new OA\Property(property: 'pagination', type: 'object'),
                     ],
                     type: 'object',
                 ),
@@ -64,9 +65,12 @@ class VaccineController extends Controller
             ),
         ],
     )]
-    public function byPet(Pet $pet): AnonymousResourceCollection
+    public function byPet(Pet $pet, Request $request): JsonResponse
     {
-        return VaccineResource::collection($this->vaccineService->findByPet($pet));
+        $perPage = (int) $request->input('per_page', 10);
+        $vaccines = $this->vaccineService->findByPet($pet, $perPage);
+
+        return PaginatedResponse::make(VaccineResource::collection($vaccines), $vaccines);
     }
 
     #[OA\Get(
@@ -74,18 +78,25 @@ class VaccineController extends Controller
         summary: 'Listar vacunas',
         security: [['bearerAuth' => []]],
         tags: ['Vacunas'],
+        parameters: [
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 10)),
+        ],
         responses: [
-            new OA\Response(response: 200, description: 'Listado de vacunas', content: new OA\JsonContent(
-                properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Vaccine'))],
+            new OA\Response(response: 200, description: 'Listado paginado de vacunas', content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Vaccine')),
+                    new OA\Property(property: 'pagination', type: 'object'),
+                ],
                 type: 'object'
             )),
         ],
     )]
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): JsonResponse
     {
-        $vaccines = $this->vaccineService->findAll();
+        $perPage = (int) $request->input('per_page', 10);
+        $vaccines = $this->vaccineService->findAll($perPage);
 
-        return VaccineResource::collection($vaccines);
+        return PaginatedResponse::make(VaccineResource::collection($vaccines), $vaccines);
     }
 
     #[OA\Post(

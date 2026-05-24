@@ -26,4 +26,26 @@ class StoreVeterinarianRequest extends FormRequest
             "active" => ["sometimes", "boolean"],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            "dni.required" => "El DNI del veterinario es obligatorio.",
+            "dni.unique" => "El DNI ingresado ya está registrado en el sistema.",
+            "dni.max" => "El DNI no debe exceder los :max caracteres.",
+            "name.required" => "El nombre del veterinario es obligatorio.",
+            "name.max" => "El nombre no debe exceder los :max caracteres.",
+            "email.required" => "El correo electrónico es obligatorio.",
+            "email.email" => "Ingrese un correo electrónico válido.",
+            "email.unique" => "El correo electrónico ingresado ya está registrado en el sistema.",
+            "email.max" => "El correo electrónico no debe exceder los :max caracteres.",
+            "password.required" => "La contraseña es obligatoria.",
+            "password.min" => "La contraseña debe tener al menos :min caracteres.",
+            "phone.max" => "El teléfono no debe exceder los :max caracteres.",
+            "address.max" => "La dirección no debe exceder los :max caracteres.",
+            "latitude.numeric" => "La latitud debe ser un valor numérico.",
+            "longitude.numeric" => "La longitud debe ser un valor numérico.",
+            "active.boolean" => "El estado activo debe ser verdadero o falso.",
+        ];
+    }
 }

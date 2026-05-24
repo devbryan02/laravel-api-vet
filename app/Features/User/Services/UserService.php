@@ -5,18 +5,39 @@ namespace App\Features\User\Services;
 use App\Features\User\Models\Role;
 use App\Features\User\Models\RoleName;
 use App\Features\User\Models\User;
+use App\Features\User\Queries\SearchOwnersQuery;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class UserService
 {
+    public function __construct(
+        private readonly SearchOwnersQuery $searchOwnersQuery,
+    ) {
+    }
+
     public function findByRole(RoleName $role): Collection
     {
         return User::with("roles")
             ->withRole($role)
             ->orderBy("name")
             ->get();
+    }
+
+    public function paginatedOwners(int $perPage = 15): LengthAwarePaginator
+    {
+        return User::with("roles")
+            ->withRole(RoleName::OWNER)
+            ->orderBy("name")
+            ->paginate($perPage);
+    }
+
+    public function searchOwners(?string $search = null, int $perPage = 15): LengthAwarePaginator
+    {
+        return $this->searchOwnersQuery->handle($search, $perPage);
     }
 
     public function createVeterinarian(array $data): User
@@ -40,6 +61,10 @@ class UserService
 
     public function delete(User $user): bool
     {
+        if ($user->pets()->exists()) {
+            throw new HttpException(409, 'No se puede eliminar el usuario porque tiene mascotas asociadas. Elimine primero las mascotas de este dueño.');
+        }
+
         return (bool) DB::transaction(function () use ($user) {
             $user->roles()->detach();
 
@@ -51,7 +76,7 @@ class UserService
     {
         $allowed = match ($managedRole) {
             RoleName::VETERINARIAN => $actor?->hasRole(RoleName::ADMIN) === true,
-            RoleName::OWNER => $actor?->hasRole(RoleName::VETERINARIAN) === true,
+            RoleName::OWNER => $actor?->hasRole(RoleName::VETERINARIAN) === true || $actor?->hasRole(RoleName::ADMIN) === true,
             RoleName::ADMIN => false,
         };
 

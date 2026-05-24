@@ -7,8 +7,8 @@ use OpenApi\Attributes as OA;
 #[OA\OpenApi(
     info: new OA\Info(
         version: '1.0.0',
-        title: 'Veterinaria API',
         description: 'Documentación OpenAPI de la API de veterinaria.',
+        title: 'Veterinaria API',
     ),
     servers: [
         new OA\Server(
@@ -28,9 +28,9 @@ use OpenApi\Attributes as OA;
 #[OA\SecurityScheme(
     securityScheme: 'bearerAuth',
     type: 'http',
-    scheme: 'bearer',
-    bearerFormat: 'JWT',
     description: 'JWT Bearer token. Usa el formato: Bearer {token}',
+    bearerFormat: 'JWT',
+    scheme: 'bearer',
 )]
 #[OA\Schema(
     schema: 'AuthLoginRequest',
@@ -83,10 +83,10 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'dni', type: 'string', example: '12345678'),
         new OA\Property(property: 'name', type: 'string', example: 'Brayan Cárdenas'),
         new OA\Property(property: 'email', type: 'string', format: 'email', example: 'admin@veterinaria.com'),
-        new OA\Property(property: 'phone', type: 'string', nullable: true, example: '999888777'),
-        new OA\Property(property: 'address', type: 'string', nullable: true, example: 'Av. Central 123'),
-        new OA\Property(property: 'latitude', type: 'number', format: 'float', nullable: true, example: -12.0464),
-        new OA\Property(property: 'longitude', type: 'number', format: 'float', nullable: true, example: -77.0428),
+        new OA\Property(property: 'phone', type: 'string', example: '999888777', nullable: true),
+        new OA\Property(property: 'address', type: 'string', example: 'Av. Central 123', nullable: true),
+        new OA\Property(property: 'latitude', type: 'number', format: 'float', example: -12.0464, nullable: true),
+        new OA\Property(property: 'longitude', type: 'number', format: 'float', example: -77.0428, nullable: true),
         new OA\Property(property: 'active', type: 'boolean', example: true),
         new OA\Property(property: 'roles', ref: '#/components/schemas/RoleList'),
         new OA\Property(property: 'created_at', type: 'string', format: 'date-time', nullable: true),
@@ -99,7 +99,7 @@ use OpenApi\Attributes as OA;
     properties: [
         new OA\Property(property: 'id', type: 'string', example: '01JVMR0M2T6FC7NG8R5GRM5AJV'),
         new OA\Property(property: 'name', type: 'string', example: 'Juan Pérez'),
-        new OA\Property(property: 'phone', type: 'string', nullable: true, example: '999888777'),
+        new OA\Property(property: 'phone', type: 'string', example: '999888777', nullable: true),
     ],
     type: 'object',
 )]
@@ -137,8 +137,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'id', type: 'string', example: '01JVMR0M2T6FC7NG8R5GRM5AJV'),
         new OA\Property(property: 'pet_id', type: 'string', example: '01JVMR0M2T6FC7NG8R5GRM5AJV'),
         new OA\Property(property: 'path', type: 'string', example: 'pets/abc123.webp'),
-        new OA\Property(property: 'url', type: 'string', nullable: true, example: '/storage/pets/abc123.webp'),
-        new OA\Property(property: 'description', type: 'string', nullable: true, example: 'Vacuna aplicada'),
+        new OA\Property(property: 'url', type: 'string', example: '/storage/pets/abc123.webp', nullable: true),
+        new OA\Property(property: 'description', type: 'string', example: 'Vacuna aplicada', nullable: true),
     ],
     type: 'object',
 )]
@@ -209,8 +209,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'name', type: 'string', example: 'Dra. María López'),
         new OA\Property(property: 'email', type: 'string', format: 'email', example: 'maria@veterinaria.com'),
         new OA\Property(property: 'password', type: 'string', format: 'password', example: 'secret123'),
-        new OA\Property(property: 'phone', type: 'string', nullable: true, example: '999888777'),
-        new OA\Property(property: 'address', type: 'string', nullable: true, example: 'Av. Central 123'),
+        new OA\Property(property: 'phone', type: 'string', example: '999888777', nullable: true),
+        new OA\Property(property: 'address', type: 'string', example: 'Av. Central 123', nullable: true),
         new OA\Property(property: 'latitude', type: 'number', format: 'float', nullable: true),
         new OA\Property(property: 'longitude', type: 'number', format: 'float', nullable: true),
         new OA\Property(property: 'active', type: 'boolean', example: true),
@@ -224,8 +224,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'dni', type: 'string', example: '87654321'),
         new OA\Property(property: 'name', type: 'string', example: 'Juan Pérez'),
         new OA\Property(property: 'email', type: 'string', format: 'email', example: 'juan@example.com'),
-        new OA\Property(property: 'phone', type: 'string', nullable: true, example: '999777666'),
-        new OA\Property(property: 'address', type: 'string', nullable: true, example: 'Jr. Lima 456'),
+        new OA\Property(property: 'phone', type: 'string', example: '999777666', nullable: true),
+        new OA\Property(property: 'address', type: 'string', example: 'Jr. Lima 456', nullable: true),
         new OA\Property(property: 'latitude', type: 'number', format: 'float', nullable: true),
         new OA\Property(property: 'longitude', type: 'number', format: 'float', nullable: true),
         new OA\Property(property: 'active', type: 'boolean', example: true),
@@ -239,8 +239,8 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'name', type: 'string', example: 'Juan Pérez'),
         new OA\Property(property: 'email', type: 'string', format: 'email', example: 'juan@example.com'),
         new OA\Property(property: 'password', type: 'string', format: 'password', example: 'secret123'),
-        new OA\Property(property: 'phone', type: 'string', nullable: true, example: '999777666'),
-        new OA\Property(property: 'address', type: 'string', nullable: true, example: 'Jr. Lima 456'),
+        new OA\Property(property: 'phone', type: 'string', example: '999777666', nullable: true),
+        new OA\Property(property: 'address', type: 'string', example: 'Jr. Lima 456', nullable: true),
         new OA\Property(property: 'latitude', type: 'number', format: 'float', nullable: true),
         new OA\Property(property: 'longitude', type: 'number', format: 'float', nullable: true),
         new OA\Property(property: 'active', type: 'boolean', example: true),
@@ -304,7 +304,7 @@ use OpenApi\Attributes as OA;
     properties: [
         new OA\Property(property: 'pet_id', type: 'string', example: '01JVMR0M2T6FC7NG8R5GRM5AJV'),
         new OA\Property(property: 'image', type: 'string', format: 'binary'),
-        new OA\Property(property: 'description', type: 'string', nullable: true, example: 'Foto frontal'),
+        new OA\Property(property: 'description', type: 'string', example: 'Foto frontal', nullable: true),
     ],
     type: 'object',
 )]

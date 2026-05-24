@@ -13,16 +13,16 @@ class VaccineAlertsQuery
     public function handle(): Collection
     {
         $today = Carbon::today();
-        $in30Days = Carbon::today()->addDays(30);
+        $inOneMonth = Carbon::today()->addMonths(1);
 
         return Vaccine::with(['pet' => function ($query) {
             $query->select('id', 'name', 'species', 'race', 'user_id')
                 ->with(['user' => fn ($query) => $query->select('id', 'name', 'phone')]);
         }])
             ->whereIn('id', $this->latestVaccineIds())
-            ->where(function ($query) use ($today, $in30Days) {
+            ->where(function ($query) use ($today, $inOneMonth) {
                 $query->where('next_vaccine_date', '<', $today)
-                    ->orWhereBetween('next_vaccine_date', [$today, $in30Days]);
+                    ->orWhereBetween('next_vaccine_date', [$today, $inOneMonth]);
             })
             ->orderBy('next_vaccine_date')
             ->get()
@@ -31,10 +31,17 @@ class VaccineAlertsQuery
 
     private function latestVaccineIds(): Builder
     {
-        return DB::table('vaccines')
-            ->select(DB::raw('MAX(id)'))
+        $closestExpiry = DB::table('vaccines')
+            ->select('pet_id', DB::raw('MIN(next_vaccine_date) as min_date'))
             ->whereNotNull('next_vaccine_date')
             ->groupBy('pet_id');
+        return DB::table('vaccines')
+            ->select(DB::raw('MAX(vaccines.id)'))
+            ->joinSub($closestExpiry, 'closest', fn ($join) =>
+            $join->on('vaccines.pet_id', '=', 'closest.pet_id')
+                ->on('vaccines.next_vaccine_date', '=', 'closest.min_date')
+            )
+            ->groupBy('vaccines.pet_id');
     }
 
     private function toAlert(Vaccine $vaccine, Carbon $today): array

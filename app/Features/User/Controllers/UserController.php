@@ -9,6 +9,7 @@ use App\Features\User\Requests\StoreVeterinarianRequest;
 use App\Features\User\Requests\UpdateUserRequest;
 use App\Features\User\Resources\UserResource;
 use App\Features\User\Services\UserService;
+use App\Support\PaginatedResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -75,20 +76,61 @@ class UserController extends Controller
         summary: 'Listar dueños',
         security: [['bearerAuth' => []]],
         tags: ['Usuarios'],
+        parameters: [
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 10)),
+        ],
         responses: [
-            new OA\Response(response: 200, description: 'Listado de dueños', content: new OA\JsonContent(
-                properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/User'))],
+            new OA\Response(response: 200, description: 'Listado paginado de dueños', content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/User')),
+                    new OA\Property(property: 'pagination', type: 'object'),
+                ],
                 type: 'object'
             )),
             new OA\Response(response: 401, description: 'No autenticado', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
             new OA\Response(response: 403, description: 'No autorizado', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
         ],
     )]
-    public function owners(Request $request): AnonymousResourceCollection
+    public function owners(Request $request): JsonResponse
     {
         $this->service->assertCanManage($request->user(), RoleName::OWNER);
 
-        return UserResource::collection($this->service->findByRole(RoleName::OWNER));
+        $perPage = (int) $request->input('per_page', 10);
+        $owners = $this->service->paginatedOwners($perPage);
+
+        return PaginatedResponse::make(UserResource::collection($owners), $owners);
+    }
+
+    #[OA\Get(
+        path: '/api/users/owners/search',
+        summary: 'Buscar dueños por DNI o nombre',
+        security: [['bearerAuth' => []]],
+        tags: ['Usuarios'],
+        parameters: [
+            new OA\Parameter(name: 'q', in: 'query', required: false, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'per_page', in: 'query', required: false, schema: new OA\Schema(type: 'integer', default: 10)),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'Listado paginado de dueños', content: new OA\JsonContent(
+                properties: [
+                    new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/User')),
+                    new OA\Property(property: 'pagination', type: 'object'),
+                ],
+                type: 'object'
+            )),
+            new OA\Response(response: 401, description: 'No autenticado', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
+            new OA\Response(response: 403, description: 'No autorizado', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
+        ],
+    )]
+    public function searchOwners(Request $request): JsonResponse
+    {
+        $this->service->assertCanManage($request->user(), RoleName::OWNER);
+
+        $search = $request->input('q');
+        $perPage = (int) $request->input('per_page', 10);
+        $owners = $this->service->searchOwners($search, $perPage);
+
+        return PaginatedResponse::make(UserResource::collection($owners), $owners);
     }
 
     #[OA\Post(

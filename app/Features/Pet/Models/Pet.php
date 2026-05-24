@@ -2,6 +2,7 @@
 
 namespace App\Features\Pet\Models;
 
+use App\Features\PetImage\Models\PetImage;
 use App\Features\User\Models\User;
 use App\Features\Vaccine\Models\Vaccine;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -36,6 +37,11 @@ class Pet extends Model
     public function vaccines(): HasMany
     {
         return $this->hasMany(Vaccine::class);
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(PetImage::class, 'pet_id');
     }
 
 }

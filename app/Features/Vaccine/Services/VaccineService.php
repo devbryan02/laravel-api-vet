@@ -5,6 +5,7 @@ namespace App\Features\Vaccine\Services;
 use App\Features\Pet\Models\Pet;
 use App\Features\Vaccine\Models\Vaccine;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class VaccineService
@@ -26,17 +27,19 @@ class VaccineService
         ]);
     }
 
-    public function findAll(): Collection
+    public function findAll(int $perPage = 10): LengthAwarePaginator
     {
-        return Vaccine::with('pet')->get();
+        return Vaccine::with('pet')
+            ->orderBy("created_at", "desc")
+            ->paginate($perPage);
     }
 
-    public function findByPet(Pet $pet): Collection
+    public function findByPet(Pet $pet, int $perPage = 10): LengthAwarePaginator
     {
         return $pet->vaccines()
             ->with('pet')
             ->orderBy('aplication_date', 'desc')
-            ->get();
+            ->paginate($perPage);
     }
 
     public function update(Vaccine $vaccine, array $data): Vaccine
