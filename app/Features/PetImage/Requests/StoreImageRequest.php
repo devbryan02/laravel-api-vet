@@ -15,7 +15,7 @@ class StoreImageRequest extends FormRequest
     {
         return [
             'pet_id' => ['required', 'exists:pets,id'],
-            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
             'description' => ['nullable', 'string', 'max:255'],
         ];
     }
@@ -28,7 +28,7 @@ class StoreImageRequest extends FormRequest
             'image.required' => 'La imagen es obligatoria.',
             'image.image' => 'El archivo debe ser una imagen válida.',
             'image.mimes' => 'La imagen debe ser de tipo: jpeg, png, jpg o webp.',
-            'image.max' => 'La imagen no debe superar los 2MB.',
+            'image.max' => 'La imagen no debe superar los 5MB.',
             'description.max' => 'La descripción no debe exceder los :max caracteres.',
         ];
     }
