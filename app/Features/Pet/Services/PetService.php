@@ -45,6 +45,13 @@ readonly class PetService
         return $pet;
     }
 
+    public function findByIdentifier(string $identifier): ?Pet
+    {
+        return Pet::with(['user', 'vaccines', 'images'])
+            ->where('identifier', $identifier)
+            ->first();
+    }
+
     public function delete(Pet $pet): bool
     {
         if ($pet->vaccines()->exists()) {

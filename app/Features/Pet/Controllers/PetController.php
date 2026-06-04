@@ -6,6 +6,7 @@ use App\Features\Pet\Models\Pet;
 use App\Features\Pet\Requests\StorePetRequest;
 use App\Features\Pet\Requests\UpdatePetRequest;
 use App\Features\Pet\Resources\PetResource;
+use App\Features\Pet\Resources\PetVerifyResource;
 use App\Features\Pet\Services\PetService;
 use App\Support\PaginatedResponse;
 use Illuminate\Http\JsonResponse;
@@ -83,7 +84,7 @@ class PetController extends Controller
     )]
     public function show(Pet $pet): PetResource
     {
-        $pet->load('user');
+        $pet->load('user', 'images');
 
         return new PetResource($pet);
     }
@@ -180,5 +181,16 @@ class PetController extends Controller
         $pets = $this->service->search($search, $perPage);
 
         return PaginatedResponse::make(PetResource::collection($pets), $pets);
+    }
+
+    public function verify(string $identifier): PetVerifyResource|JsonResponse
+    {
+        $pet = $this->service->findByIdentifier($identifier);
+
+        if (!$pet) {
+            return response()->json(['message' => 'Mascota no encontrada'], 404);
+        }
+
+        return new PetVerifyResource($pet);
     }
 }

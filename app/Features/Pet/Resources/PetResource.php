@@ -10,6 +10,7 @@ class PetResource extends JsonResource
     {
         return [
             "id"            =>$this->id,
+            "identifier"    =>$this->identifier,
             "name"          =>$this->name,
             "species"       =>$this->species,
             "race"          =>$this->race,
@@ -20,6 +21,13 @@ class PetResource extends JsonResource
             "age"           =>$this->years." años y ".$this->months." meses",
             "status"        =>$this->status,
             "user"          =>$this->user?->only("id","name","phone"),
+            "images"        =>$this->whenLoaded('images', fn() =>
+                $this->images->map(fn($img) => [
+                    "id"       => $img->id,
+                    "path_url" => $img->path_url,
+                    "pet_id"   => $img->pet_id,
+                ])
+            ),
         ];
     }
 }
